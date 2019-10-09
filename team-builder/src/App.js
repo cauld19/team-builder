@@ -5,18 +5,26 @@ import FormList from "./components/FormList";
 
 
 import './App.css';
+import { memberExpression } from '@babel/types';
 
 
 function App() {
 
   const [members, setMember] = useState([
-    {
-      id: 1,
-      name: "Christian",
-      email: "christian.martin.auld@gmail.com",
-      role: "CEO"
-    }
+    // {
+    //   id: 1,
+    //   name: "Christian",
+    //   email: "christian.martin.auld@gmail.com",
+    //   role: "CEO"
+    // }
   ]);
+
+  const removeMember = index => {
+    const newMembers = [...members];
+    newMembers.splice(index, 1);
+    setMember(newMembers);
+  }
+
 
   const addMember = member => {
     const newMember = {
@@ -32,7 +40,7 @@ function App() {
     <div className="App">
       <h1>Team List</h1>
       <FormList addMemberFn={addMember}/>
-      <Form membersList={members}/>
+      <Form membersList={members} removeMember={removeMember}/>
     </div>
   );
 }
