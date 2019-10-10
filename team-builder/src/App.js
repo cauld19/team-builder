@@ -5,42 +5,66 @@ import FormList from "./components/FormList";
 
 
 import './App.css';
-import { memberExpression } from '@babel/types';
 
 
 function App() {
 
-  const [members, setMember] = useState([
-    // {
-    //   id: 1,
-    //   name: "Christian",
-    //   email: "christian.martin.auld@gmail.com",
-    //   role: "CEO"
-    // }
-  ]);
+  const [members, setMembers] = useState([
+    {
+      id: 1,
+      name: "christian",
+      email: "christian_auld@hotmail.com",
+      role: "Back-end"
+    }
+]);
+  const [editing, setEditing] = useState(false);
+  const initialFormState = { id: null, name: '', email: '', role: '' }
+
+  const [currentMember, setCurrentMember] = useState(initialFormState)
+
+
+
+  const editMember = member => {
+    setEditing(true)
+    setCurrentMember({ id: member.id, name: member.name, email: member.email, role: member.role  })
+    console.log(currentMember, editing)
+  }
+
+  const updateMember = (id, updatedMember) => {
+    setEditing(false)
+  
+    setMembers(members.map(member => (member.id === id ? updatedMember : member)))
+    console.log(updatedMember)
+  }
 
   const removeMember = index => {
+    setEditing(false)
     const newMembers = [...members];
     newMembers.splice(index, 1);
-    setMember(newMembers);
+    setMembers(newMembers);
   }
 
 
   const addMember = member => {
     const newMember = {
-      id: Date.now(),
+      id: members.length + 1,
       name: member.name,
       email: member.email,
       role: member.role
     };
-    setMember([...members, newMember])
+    setMembers([...members, newMember])
   };
 
   return (
     <div className="App">
       <h1>Team List</h1>
-      <FormList addMemberFn={addMember}/>
-      <Form membersList={members} removeMember={removeMember}/>
+      <FormList 
+        addMemberFn={addMember}
+        currentMember={currentMember}
+        updateMember={updateMember} 
+        editing={editing}
+        setEditing={setEditing}/>
+      <Form membersList={members} removeMember={removeMember} editMember={editMember}/>
     </div>
   );
 }

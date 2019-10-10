@@ -1,7 +1,16 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 const FormList = props => {
-    const [member, setMember] = useState({name: "", email: "", role: ""});
+
+    const [member, setMember] = useState(props.currentMember);
+
+    useEffect(() => {
+        if(props.editing){
+            setMember(props.currentMember)
+        }
+        
+      }, [props])
+
 
     const handleChange = e => {
         setMember({...member, [e.target.name]: e.target.value});
@@ -9,9 +18,17 @@ const FormList = props => {
 
     const handleSubmit = evt => {
         evt.preventDefault();
-        props.addMemberFn(member);
-        setMember({name: "", email: "", role: ""})
+        if (props.editing === false) {
+            props.addMemberFn(member);
+            setMember({name: "", email: "", role: ""})
+        } else {
+            props.updateMember(props.currentMember.id, member);
+            setMember({name: "", email: "", role: ""})
+        }
+        console.log(props)
     }
+
+    
 
     return (
         <form onSubmit={handleSubmit}>
@@ -32,14 +49,20 @@ const FormList = props => {
                 onChange={handleChange}
             />
             <label htmlFor="role">Role</label>
-            <input
+            <select id="roleSelect" name="role" onChange={handleChange}>
+                <option value=""></option>
+                <option value="Front-end">Front-end</option>
+                <option value="Back-end">Back-end</option>
+                <option value="UI">UI</option>
+            </select>
+            {/* <input
                 id="role"
                 name="role"
                 type="text"
                 value={member.role}
                 onChange={handleChange}
-            />
-            <button type="submit">Add member</button>
+            /> */}
+            <button type="submit">Add/Edit</button>
     </form>
     )
 }
