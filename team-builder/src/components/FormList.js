@@ -49,7 +49,7 @@ const FormList = props => {
                 onChange={handleChange}
             />
             <label htmlFor="role">Role</label>
-            <select id="roleSelect" name="role" onChange={handleChange}>
+            <select id="roleSelect" name="role" onChange={handleChange} value={member.role}>
                 <option value=""></option>
                 <option value="Front-end">Front-end</option>
                 <option value="Back-end">Back-end</option>
